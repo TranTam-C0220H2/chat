@@ -54,7 +54,7 @@ function updateSocketId(socket, _token, socket_id) {
             socket_id,
         }),
     })
-        .then(res => res.json())
+        .then(res => res.text())
         .then(function (response) {
 
         })
