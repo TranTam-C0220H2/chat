@@ -50,9 +50,7 @@ function updateSocketId(socket, _token, socket_id) {
             'Content-type': 'application/json',
             'Authorization': `Bearer ${_token}`,
         },
-        body: JSON.stringify({
-            socket_id,
-        }),
+        body: { socket_id }
     })
         .then(res => res.json())
         .then(function (response) {
