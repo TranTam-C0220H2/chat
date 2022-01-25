@@ -16,12 +16,12 @@ const fetch = require('node-fetch');
 socketIo.on("connection", (socket) => { ///Handle khi có connect từ client tới
     // import fetch from "node-fetch";
     console.log("New client connected" + socket.id);
-    socketIo.emit("getId", {data: socket.id})
+    socket.to(socket.id).emit("getId", socket.id)
 
     //update socket id to database
     socket.on('update_socket_id', function (_token, socket_id) {
         console.log('update_socket_id')
-        updateSocketId(socketIo, _token, socket_id);
+        updateSocketId(socket, _token, socket_id);
     });
 
     socket.on('create_room_group', function (_token, room_key, members) {
@@ -57,7 +57,7 @@ function updateSocketId(socket, _token, socket_id) {
             console.log(response)
         })
         .catch(err => {
-            socketIo.to(socket_id).emit('socket_error', {err: err});
+            socket.to(socket_id).emit('socket_error', err);
             console.log('Update socket id: ', err);
         })
 }
