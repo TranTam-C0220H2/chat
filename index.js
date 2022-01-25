@@ -19,22 +19,22 @@ socketIo.on("connection", (socket) => { ///Handle khi có connect từ client t�
     socketIo.to(socket.id).emit("getId", {data: socket.id})
 
     //update socket id to database
-    socket.on('update_socket_id', function (_token, socket_id) {
-        console.log('update_socket_id')
+    socket.on('update_socket_id', function (data) {
+        console.log('update_socket_id', data)
         fetch(`${API_URI}/user/update-socket-id`, {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
-                'Authorization': `Bearer ${_token}`,
+                'Authorization': `Bearer ${data._token}`,
             },
-            body: { socket_id }
+            body: JSON.stringify({ socket_id: data.socket_id })
         })
             .then(res => res.json())
             .then(function (response) {
                 console.log('response__', response)
             })
             .catch(err => {
-                socketIo.to(socket_id).emit('socket_error', 'test');
+                socketIo.to(data.socket_id).emit('socket_error', 'test');
                 console.log('Update socket id: ', err);
             })
     });
