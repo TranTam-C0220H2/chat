@@ -16,7 +16,7 @@ const fetch = require('node-fetch');
 socketIo.on("connection", (socket) => { ///Handle khi có connect từ client tới
     // import fetch from "node-fetch";
     console.log("New client connected" + socket.id);
-    socketIo.to(socket.id).emit("getId", {data: socket.id})
+    socketIo.to(socket.id).emit("get_id", {data: socket.id})
 
     //update socket id to database
     socket.on('update_socket_id', function (data) {
