@@ -54,9 +54,9 @@ function updateSocketId(socket, _token, socket_id) {
             socket_id,
         }),
     })
-        .then(res => res.text())
+        .then(res => res.json())
         .then(function (response) {
-
+            console.log(response)
         })
         .catch(err => {
             socket.to(socket_id).emit('socket_error', err);
