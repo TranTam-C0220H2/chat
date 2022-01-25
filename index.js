@@ -37,6 +37,10 @@ socketIo.on("connection", (socket) => { ///Handle khi có connect từ client t�
             })
     });
 
+    socket.on('send_friend_request', function (data) {
+        socketIo.to(data.receiver_socket_id).emit('receive_friend_request', data.sender_info);
+    });
+
     socket.on('create_room_group', function (_token, room_key, members) {
 
     });
