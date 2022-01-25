@@ -26,10 +26,9 @@ socketIo.on("connection", (socket) => { ///Handle khi có connect từ client t�
                 'Content-type': 'application/json',
                 'Authorization': `Bearer ${data._token}`,
             },
-            body: { socket_id: data.socket_id },
-            dataType: 'json'
+            body: JSON.stringify({ socket_id: data.socket_id }),
         })
-            .then(res => res.json())
+            .then(res => res.text())
             .then(function (response) {
                 console.log('response__', response)
             })
