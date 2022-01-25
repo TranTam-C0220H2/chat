@@ -21,7 +21,7 @@ socketIo.on("connection", (socket) => { ///Handle khi có connect từ client t�
     //update socket id to database
     socket.on('update_socket_id', function (_token, socket_id) {
         console.log('update_socket_id')
-        updateSocketId(socket, _token, socket_id);
+        updateSocketId(socketIo, _token, socket_id);
     });
 
     socket.on('create_room_group', function (_token, room_key, members) {
@@ -59,7 +59,7 @@ function updateSocketId(socket, _token, socket_id) {
             console.log(response)
         })
         .catch(err => {
-            socket.to(socket_id).emit('socket_error', err);
+            socketIo.to(socket_id).emit('socket_error', {err: err});
             console.log('Update socket id: ', err);
         })
 }
