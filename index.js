@@ -21,7 +21,22 @@ socketIo.on("connection", (socket) => { ///Handle khi có connect từ client t�
     //update socket id to database
     socket.on('update_socket_id', function (_token, socket_id) {
         console.log('update_socket_id')
-        updateSocketId(socketIo, _token, socket_id);
+        fetch(`${API_URI}/user/update-socket-id`, {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json',
+                'Authorization': `Bearer ${_token}`,
+            },
+            body: { socket_id }
+        })
+            .then(res => res.json())
+            .then(function (response) {
+                console.log(response)
+            })
+            .catch(err => {
+                socketIo.to(socket_id).emit('socket_error', {err: err});
+                console.log('Update socket id: ', err);
+            })
     });
 
     socket.on('create_room_group', function (_token, room_key, members) {
@@ -42,25 +57,6 @@ socketIo.on("connection", (socket) => { ///Handle khi có connect từ client t�
         console.log("Client disconnected"); // Khi client disconnect thì log ra terminal.
     });
 });
-
-function updateSocketId(socketIo, _token, socket_id) {
-    fetch(`${API_URI}/user/update-socket-id`, {
-        method: 'POST',
-        headers: {
-            'Content-type': 'application/json',
-            'Authorization': `Bearer ${_token}`,
-        },
-        body: { socket_id }
-    })
-        .then(res => res.json())
-        .then(function (response) {
-            console.log(response)
-        })
-        .catch(err => {
-            socketIo.to(socket_id).emit('socket_error', {err: err});
-            console.log('Update socket id: ', err);
-        })
-}
 
 server.listen(process.env.PORT || 3000, () => {
     console.log('Server đang chay');
