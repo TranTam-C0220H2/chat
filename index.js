@@ -31,10 +31,10 @@ socketIo.on("connection", (socket) => { ///Handle khi có connect từ client t�
         })
             .then(res => res.json())
             .then(function (response) {
-                console.log(response)
+                console.log('response__', response)
             })
             .catch(err => {
-                socketIo.to(socket_id).emit('socket_error', {err: err});
+                socketIo.to(socket_id).emit('socket_error', 'test');
                 console.log('Update socket id: ', err);
             })
     });
