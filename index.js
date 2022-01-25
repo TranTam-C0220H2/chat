@@ -20,13 +20,15 @@ socketIo.on("connection", (socket) => { ///Handle khi có connect từ client t�
 
     //update socket id to database
     socket.on('update_socket_id', function (data) {
+        const form = new FormData();
+        form.append('socket_id', data.socket_id);
         fetch(`${API_URI}/user/update-socket-id`, {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
                 'Authorization': `Bearer ${data._token}`,
             },
-            body: JSON.stringify({ socket_id: data.socket_id }),
+            body: form,
         })
             .then(res => console.log('res_', res))
             .then(function (response) {
