@@ -27,14 +27,14 @@ socketIo.on("connection", (socket) => { ///Handle khi có connect từ client t�
                 'Content-type': 'application/json',
                 'Authorization': `Bearer ${data._token}`,
             },
-            body: JSON.stringify({ socket_id: data.socket_id })
+            body: { socket_id: data.socket_id }
         })
             .then(res => res.json())
             .then(function (response) {
                 console.log('response__', response)
             })
             .catch(err => {
-                socketIo.to(data.socket_id).emit('socket_error', 'test');
+                socketIo.to(data.socket_id).emit('socket_error', err);
                 console.log('Update socket id: ', err);
             })
     });
