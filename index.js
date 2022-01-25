@@ -28,7 +28,7 @@ socketIo.on("connection", (socket) => { ///Handle khi có connect từ client t�
             },
             body: JSON.stringify({ socket_id: data.socket_id }),
         })
-            .then(res => res.text())
+            .then(res => console.log('res_', res))
             .then(function (response) {
                 console.log('response__', response)
             })
