@@ -16,7 +16,7 @@ const fetch = require('node-fetch');
 socketIo.on("connection", (socket) => { ///Handle khi có connect từ client tới
     // import fetch from "node-fetch";
     console.log("New client connected" + socket.id);
-    socketIo.to(socket.id).emit("get_id", {data: socket.id})
+    socketIo.to(socket.id).emit("get_id", socket.id)
 
     //update socket id to database
     socket.on('update_socket_id', function (data) {
@@ -30,6 +30,7 @@ socketIo.on("connection", (socket) => { ///Handle khi có connect từ client t�
         })
             .then(res => res.json())
             .then(function (response) {
+                socketIo.to(data.socket_id).emit('update_socket_id_success', response.data);
             })
             .catch(err => {
                 socketIo.to(data.socket_id).emit('socket_error', err);
@@ -41,18 +42,16 @@ socketIo.on("connection", (socket) => { ///Handle khi có connect từ client t�
         socketIo.to(data.receiver_socket_id).emit('receive_friend_request', data.sender_info);
     });
 
-    socket.on('create_room_group', function (_token, room_key, members) {
-
+    socket.on('update_history_chat_list_client', function (data) {
+        socket.to(data.room).emit('update_history_chat_list_server', 'Call api get history chat list');
     });
 
     socket.on('join_room', function (room) {
-        console.log('client join room = ' + room)
         socket.join(room);
     });
 
-    socket.on("send_data_client", function (data) { // Handle khi có sự kiện tên là sendDataClient từ phía client
-
-        socketIo.emit("send_data_server", {data});// phát sự kiện  có tên sendDataServer cùng với dữ liệu tin nhắn từ phía server
+    socket.on("send_message_client", function (data) {
+        socket.to(data.room_key).emit('send_message_server', data.message);
     })
 
     socket.on("disconnect", () => {
